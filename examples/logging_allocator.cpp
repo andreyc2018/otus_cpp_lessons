@@ -3,36 +3,79 @@
 #include <memory>
 
 template <typename T>
-struct logging_allocator
+struct allocator_new
 {
     using value_type = T;
-    std::allocator<T> alloc;
+
+    template<typename U>
+    struct rebind
+    { using other = allocator_new<U>; };
 
     T* allocate(std::size_t n)
     {
-        T* ptr = alloc.allocate(n);
-        std::cerr << "allocate  : " << n << " " << ptr << "\n";
+        T* ptr = static_cast<T*>(operator new(n * sizeof (T)));
+        std::cerr << "new allocate  : " << n << " " << ptr << "\n";
         return ptr;
     }
 
     void deallocate(T* ptr, std::size_t n)
     {
-        std::cerr << "deallocate: " << n << " " << ptr << "\n";
-        alloc.deallocate(ptr, n);
+        std::cerr << "new deallocate: " << n << " " << ptr << "\n";
+        operator delete(ptr, n);
     }
 
     template <typename U, typename... Args>
     void construct(U* ptr, Args&&... args)
     {
-        std::cerr << "construct : " << ptr << " with " << sizeof...(args) << " args\n";
-        alloc.construct(ptr, std::forward<Args>(args)...);
+        std::cerr << "new construct : " << ptr << " with " << sizeof...(args) << " args\n";
+        ::new(static_cast<void*>(ptr)) U(std::forward<Args>(args)...);
     }
 
     template <typename U>
     void destroy(U* ptr)
     {
-        std::cerr << "destroy   : " << ptr << "\n";
-        alloc.destroy(ptr);
+        std::cerr << "new destroy   : " << ptr << "\n";
+        ptr->~U();
+    }
+};
+
+template <typename T, typename RealAllocator = std::allocator<T>>
+struct logging_allocator
+{
+    using value_type = T;
+    using allocator_type = RealAllocator;
+
+    template<typename U>
+    struct rebind
+    { using other = logging_allocator<U, allocator_type>; };
+
+    allocator_type allocator;
+
+    T* allocate(std::size_t n)
+    {
+        T* ptr = allocator.allocate(n);
+        std::cerr << "    allocate  : " << n << " " << ptr << "\n";
+        return ptr;
+    }
+
+    void deallocate(T* ptr, std::size_t n)
+    {
+        std::cerr << "    deallocate: " << n << " " << ptr << "\n";
+        allocator.deallocate(ptr, n);
+    }
+
+    template <typename U, typename... Args>
+    void construct(U* ptr, Args&&... args)
+    {
+        std::cerr << "    construct : " << ptr << " with " << sizeof...(args) << " args\n";
+        allocator.construct(ptr, std::forward<Args>(args)...);
+    }
+
+    template <typename U>
+    void destroy(U* ptr)
+    {
+        std::cerr << "    destroy   : " << ptr << "\n";
+        allocator.destroy(ptr);
     }
 };
 
@@ -41,7 +84,9 @@ struct logging_allocator
 class Foo
 {
     public:
-        using data_t = std::vector<int, logging_allocator<int>>;
+        using data_t = std::vector<int,
+                                   logging_allocator<int,
+                                                     allocator_new<int>>>;
 
         data_t get_by_value()
         {
