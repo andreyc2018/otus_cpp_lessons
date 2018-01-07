@@ -1,12 +1,17 @@
 #include "xray.h"
 #include <iostream>
 
-template <typename... Args>
-void iterate(Args... args)
+void iterate()
 {
-    std::cout << sizeof...(args) << "\n";
-    int a[sizeof...(args)] = {(std::cout << args << ", ", 0)...};
     std::cout << "\n--\n";
+}
+
+template <typename T, typename... Args>
+void iterate(T t, Args... args)
+{
+    std::cout << t << ", ";
+    iterate(args...);
+//    int a[sizeof...(args)] = {(std::cout << args << ", ", 0)...};
 }
 
 int main(int, char**)
