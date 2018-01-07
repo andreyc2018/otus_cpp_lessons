@@ -10,5 +10,4 @@ struct xray
     
     xray& operator=(const xray&) { std::cout << __PRETTY_FUNCTION__ << "\n"; return *this; }
     xray& operator=(xray&&) { std::cout << __PRETTY_FUNCTION__ << "\n"; return *this; }
-
 };
