@@ -1,0 +1,15 @@
+SF.1: Use a .cpp suffix for code files and .h for interface files if your project doesn't already follow another convention
+ES.11: Use auto to avoid redundant repetition of type names
+ES.56: Write std::move() only when you need to explicitly move an object to another scope
+F.60: Prefer T* over T& when "no argument" is a valid option
+R.20: Use unique_ptr or shared_ptr to represent ownership
+ES.1: Prefer the standard library to other libraries and to "handcrafted code"
+T.120: Use template metaprogramming only when you really need to
+C.50: Use a factory function if you need "virtual behavior" during initialization
+NL.17: Use K&R-derived layout
+C.3: Represent the distinction between an interface and an implementation using a class
+A.2: Express potentially reusable parts as a library
+P.8: Don't leak any resources
+
+
+
