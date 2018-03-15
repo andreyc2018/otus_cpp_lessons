@@ -11,16 +11,11 @@ facade.cpp
 factory_method.cpp
 flyweight.cpp
 lazy_initialization.cpp
+Makefile
 mediator.cpp
 memento.cpp
 multiton.cpp
 object_pool.cpp
-observer.cpp
 prototype.cpp
 proxy.cpp
 singleton.cpp
-state.cpp
-strategy.cpp
-template_method.cpp
-visitor.cpp
-Makefile

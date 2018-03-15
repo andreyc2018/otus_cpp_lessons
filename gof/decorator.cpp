@@ -14,15 +14,15 @@ class RawFile : public File {
 };
 
 class ZipFile : public File {
-    File *clock_signal;
+    File *file;
 
     void write() override {
         std::cout << "compress" << std::endl;
-        clock_signal->write();
+        file->write();
     }
 
 public:
-    ZipFile(File *clock_signal_) : clock_signal(clock_signal_) {};
+    ZipFile(File *file_) : file(file_) {};
 };
 
 int main(int, char *[])
@@ -30,6 +30,6 @@ int main(int, char *[])
     File *c = new RawFile;
     c->write();
 
-    File *t = new ZipFile(c);
+    File *t = new ZipFile(new RawFile);
     t->write();
 }

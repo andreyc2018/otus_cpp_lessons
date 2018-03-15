@@ -33,4 +33,6 @@ int main(int, char *[])
     ImageResizer rs;
 
     rs.get_box(100);
+    rs.get_box(1000);
+    rs.get_box(1000);
 }

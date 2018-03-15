@@ -21,11 +21,11 @@ class Logger : public ILogger
 
 class LevelLogger : public ILogger
 {
-    bool level;
+    int level;
     ILogger *logger;
 
 public:
-    LevelLogger(bool level_, ILogger *logger_) : level(level_), logger(logger_) {};
+    LevelLogger(int level_, ILogger *logger_) : level(level_), logger(logger_) {};
 
     void info() override {
         if (level > 0)

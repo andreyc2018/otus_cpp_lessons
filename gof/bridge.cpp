@@ -7,7 +7,7 @@ public:
     virtual void now() = 0;
 };
 
-class InternelClockSignal : public ClockSignal {
+class InternetClockSignal : public ClockSignal {
     void now() override {
         std::cout << "internet clock" << std::endl;
     }
@@ -15,7 +15,7 @@ class InternelClockSignal : public ClockSignal {
 
 class LocalClockSignal : public ClockSignal {
     void now() override {
-        std::cout << "internet clock" << std::endl;
+        std::cout << "local clock" << std::endl;
     }
 };
 
@@ -44,7 +44,7 @@ class AnalogClock : public Clock {
 int main(int, char *[])
 {
     Clock *c = new DigitalClock;
-    c->s = new InternelClockSignal;
+    c->s = new InternetClockSignal;
 
     c->refresh();
 }
